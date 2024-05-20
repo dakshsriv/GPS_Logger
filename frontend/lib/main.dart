@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,7 +56,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Position? _position;
   bool counter = false;
+  var _counter;
+
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      _position = position;
+    });
+  }
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -112,22 +124,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? const Text(
                     'GPS Logging is enabled') // Showing widget for `true` condition
 
-                : const Text('GPS Logging is disabled')
+                : const Text('GPS Logging is disabled'),
+            _position != null
+                ? Text('Current Location: ' + _position.toString())
+                : Text("")
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (counter == true) {
-            setState(() {
-              counter = false;
-            });
-          } else {
-            setState(() {
-              counter = true;
-            });
-          }
-        },
+        onPressed: () { if (counter == true) { setState(() {  counter = false;});} else {setState(() {counter = true;});}}   
+        ,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
