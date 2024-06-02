@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,17 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Position? _position;
-  bool counter = false;
-  var _counter;
-
-  void _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      _position = position;
-    });
-  }
+  int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -75,11 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      if (counter == true) {
-        counter == false;
-      } else {
-        counter == true;
-      }
+      _counter++;
     });
   }
 
@@ -120,20 +105,18 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            counter
-                ? const Text(
-                    'GPS Logging is enabled') // Showing widget for `true` condition
-
-                : const Text('GPS Logging is disabled'),
-            _position != null
-                ? Text('Current Location: ' + _position.toString())
-                : Text("")
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { if (counter == true) { setState(() {  counter = false;});} else {setState(() {counter = true;});}}   
-        ,
+        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
